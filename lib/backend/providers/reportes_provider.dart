@@ -42,12 +42,17 @@ class ReportesProvider {
   }
 
   Future<int> totalIncidencias() async {
-    final db = await database;
-    final res =
-        await db!.rawQuery("SELECT sum(incidencia) total from muestreos");
+    try {
+      final db = await database;
+      final res =
+          await db!.rawQuery("SELECT sum(incidencia) total from muestreos");
 
-    if (res.isEmpty) return 0;
-    return int.parse(res.first['total'].toString());
+      if (res.isEmpty) return 0;
+      return int.parse(res.first['total'].toString());
+    } catch (e) {
+      print("Error en totalIncidencias ${e.toString()}");
+      return 0;
+    }
   }
 
   Future<List<Map<String, dynamic>>> reportePlagas() async {
