@@ -178,4 +178,11 @@ class EstudiosProvider {
     final maximo = int.parse(res.first['maximo'].toString()) ?? 1;
     return maximo;
   }
+
+  Future<int> getNextId() async {
+    final db = await database;
+    final res = await db?.rawQuery('SELECT MAX(id) as lastId FROM $tabla');
+    int lasId = int.parse(((res!.first['lastId'] ?? 0).toString()));
+    return lasId + 1;
+  }
 }

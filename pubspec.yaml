@@ -18,6 +18,9 @@ dependencies:
   fl_chart: ^0.63.0
   connectivity_plus: ^4.0.2
   full_screen_image: ^2.0.0
+  csv: ^5.0.2
+  flutter_email_sender: ^6.0.1
+  geolocator: ^10.0.1
 
 
 dev_dependencies:

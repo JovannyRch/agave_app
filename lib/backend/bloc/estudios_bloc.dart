@@ -45,4 +45,8 @@ class EstudiosBloc {
   Future<List<Plaga>> getPlagas() {
     return EstudiosProvider.db.getPlagas();
   }
+
+  Future<int> getNextId() {
+    return EstudiosProvider.db.getNextId();
+  }
 }

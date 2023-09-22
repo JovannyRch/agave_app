@@ -4,7 +4,7 @@ import 'package:agave_app/backend/models/muestreo_model.dart';
 import 'package:agave_app/backend/providers/estudios_provider.dart';
 
 class Estudio {
-  int id;
+  int? id;
   double humedad;
   String createdAt;
   int plagaId;
@@ -28,7 +28,7 @@ class Estudio {
   int totalIncidencias = 0;
 
   Estudio(
-      {required this.id,
+      {this.id,
       required this.humedad,
       required this.createdAt,
       required this.parcelaId,
@@ -72,26 +72,26 @@ class Estudio {
     nombrePlaga = await this.getPlaga;
     totalMuestreos = await getMuestras;
     totalIncidencias = await getIncidencias;
-    muestreos = await EstudiosProvider.db.getMuestreos(this.id);
+    muestreos = await EstudiosProvider.db.getMuestreos(this.id ?? 0);
     varianza = calcularVarianza(muestreos);
     desviacionEstandar = sqrt(varianza);
     return 1;
   }
 
   Future<int> get getMuestras async {
-    return EstudiosProvider.db.totalMuestras(this.id);
+    return EstudiosProvider.db.totalMuestras(this.id ?? 0);
   }
 
   Future<int> get getMuestreos async {
-    return EstudiosProvider.db.totalMuestras(this.id);
+    return EstudiosProvider.db.totalMuestras(this.id ?? 0);
   }
 
   Future<int> get getIncidencias async {
-    return EstudiosProvider.db.incidencias(this.id);
+    return EstudiosProvider.db.incidencias(this.id ?? 0);
   }
 
   Future<double> get getPromedio async {
-    return EstudiosProvider.db.getPromedio(this.id);
+    return EstudiosProvider.db.getPromedio(this.id ?? 0);
   }
 
   Future<String> get getPlaga async {

@@ -36,7 +36,15 @@ class MuestreosProvider {
 
   insert(Muestreo data) async {
     final db = await database;
+    data.id = await getNextId();
     return await db!.insert(tabla, data.toJson());
+  }
+
+  Future<int> getNextId() async {
+    final db = await database;
+    final res = await db?.rawQuery('SELECT MAX(id) as lastId FROM $tabla');
+    int lasId = int.parse(((res!.first['lastId'] ?? 0).toString()));
+    return lasId + 1;
   }
 
   Future<int> total(String table) async {

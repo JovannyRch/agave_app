@@ -11,7 +11,7 @@ class Muestreo {
   int estudioId;
 
   Muestreo(
-      {required this.id,
+      {this.id = 0,
       required this.latitud,
       required this.longitud,
       required this.norte,

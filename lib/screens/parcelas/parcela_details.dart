@@ -1,6 +1,7 @@
 import 'package:agave_app/backend/bloc/parcelas_bloc.dart';
 import 'package:agave_app/backend/models/parcela_model.dart';
 import 'package:agave_app/const/const.dart';
+import 'package:agave_app/screens/parcelas/estudios_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -401,10 +402,10 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
       bottom: 0,
       child: GestureDetector(
         onTap: () {
-          /* Navigator.push(
+          Navigator.push(
             this.globalContext,
             CupertinoPageRoute(builder: (context) => EstudiosScreen(p)),
-          ); */
+          );
         },
         child: Container(
           height: 45,
