@@ -55,7 +55,8 @@ class Krigeado {
         efectoPepita: this.efectoPepita,
         meseta: this.meseta);
     Matrix c = Matrix(gamma.getMatriC());
-
+    print("Matriz c");
+    print(c);
     Matrix cInversa = c.inverse();
 
     Vector c0 = Vector.column(gamma.getC0());

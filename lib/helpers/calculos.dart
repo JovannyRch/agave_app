@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:agave_app/backend/models/chart_data.dart';
+import 'package:sample_statistics/sample_statistics.dart';
 
 import '../backend/models/estudio_model.dart';
 import '../backend/models/muestreo_model.dart';
@@ -366,14 +367,15 @@ class Coeficientes {
   double asimetria;
   double covarianza;
   double varianza;
-  RegresionLineal regresionLineal;
-  Coeficientes({
-    required this.covarianza,
-    required this.curtosis,
-    required this.asimetria,
-    required this.varianza,
-    required this.regresionLineal,
-  });
+  RegresionLineal regresionLineal = RegresionLineal(a: 0.0, b: 0.0);
+  Stats<double> stats = Stats([]);
+
+  Coeficientes(
+      {this.covarianza = 0.0,
+      this.curtosis = 0.0,
+      this.asimetria = 0.0,
+      this.varianza = 0.0,
+      required this.regresionLineal});
 }
 
 double formatNumber(double val) {

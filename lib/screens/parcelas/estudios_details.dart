@@ -10,6 +10,9 @@ import 'package:agave_app/helpers/calculos.dart';
 import 'package:agave_app/helpers/convertidor.dart';
 import 'package:agave_app/helpers/krigeado.dart';
 import 'package:agave_app/helpers/utils.dart';
+import 'package:agave_app/screens/parcelas/ajuste_screen.dart';
+import 'package:agave_app/screens/parcelas/heat_map.dart';
+import 'package:agave_app/screens/parcelas/semivariograma_screen.dart';
 
 import 'package:flutter/material.dart';
 /* import 'package:flutter_svg/flutter_svg.dart'; */
@@ -405,7 +408,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
               icon: FontAwesomeIcons.solidSun,
               isCurrent: true,
               function: () {
-                /*  if (estudio.muestreos.length != 0) {
+                if (estudio.muestreos.length != 0) {
                   Modelo m = getModelo(estudio.modelo);
 
                   Navigator.push(
@@ -415,8 +418,8 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
                         fullscreenDialog: true,
                       ));
                 } else {
-                  showMessage("Aun no hay suficientes datos", key);
-                } */
+                  showSnackBar(context, "Aun no hay suficientes datos");
+                }
               },
             ),
             ButtonTop(
@@ -446,7 +449,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
         datos: data,
       );
 
-      /* Navigator.push(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => AjusteScreen(
@@ -460,14 +463,14 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
             valoresModelo: ajuste.getValues(estudio.modelo),
           ),
         ),
-      ); */
+      );
     } else {
-      /*  Navigator.push(
+      Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => SemivariogramScreen(estudio),
             fullscreenDialog: true,
-          )); */
+          ));
     }
   }
 
