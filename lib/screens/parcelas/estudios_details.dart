@@ -221,7 +221,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
     return s.replaceAll(' ', "_").trim();
   }
 
-  late String filePath;
+  String filePath = "";
 
   getCsv() async {
     List<List<dynamic>> rows = [];
@@ -242,13 +242,17 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
       }
 
       File f = await _localFile;
-
+      print("F.path");
+      print(f.path);
+      this.filePath = f.path;
       String csv = const ListToCsvConverter().convert(rows);
       f.writeAsString(csv);
     }
   }
 
   sendMailAndAttachment() async {
+    print("filePath");
+    print(filePath);
     final Email email = Email(
       body:
           "<p>Estudio de una parcela de aguacate realizado el <b>${estudio.createdAt}</b> </p>"
@@ -263,8 +267,8 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
           "</ul>",
       subject: 'Estudio-${estudio.id}',
       recipients: [],
-      isHTML: true,
-      attachmentPaths: [filePath],
+      isHTML: true, /* 
+      attachmentPaths: [filePath], */
     );
 
     await FlutterEmailSender.send(email);
@@ -634,7 +638,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
                   onPressed: () {
                     Navigator.pop(context, 1);
                   }),
-              SimpleDialogOption(
+              /*  SimpleDialogOption(
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -648,7 +652,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
                   ),
                   onPressed: () {
                     Navigator.pop(context, 2);
-                  }),
+                  }), */
               /*  
               SimpleDialogOption(
                 child: Row(
@@ -672,7 +676,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
     switch (option) {
       case 1:
         //Eliminar
-        final bool respuesta =
+        final bool? respuesta =
             await this._dialogConfirm("¿Estás seguro de eliminar el registro?");
 
         if (respuesta != null && respuesta && this.estudio.id != null) {
@@ -688,36 +692,37 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
     }
   }
 
-  bool _dialogConfirm(String title, {String textMainButton = "Eliminar"}) {
-    /*  return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  textMainButton,
-                  style: TextStyle(color: Colors.red),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
+  Future<bool?> _dialogConfirm(String title,
+      {String textMainButton = "Eliminar"}) {
+    //Create and dialog confirm
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                textMainButton,
+                style: TextStyle(color: Colors.red),
               ),
-              FlatButton(
-                child: Text(
-                  "Cancelar",
-                  style: TextStyle(color: Colors.grey),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            TextButton(
+              child: const Text(
+                "Cancelar",
+                style: TextStyle(color: Colors.grey),
               ),
-            ],
-          );
-        }); */
-
-    return false;
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
