@@ -8,7 +8,7 @@ import 'dart:convert';
 class HeatMap extends StatefulWidget {
   Estudio estudio;
   Modelo modelo;
-  HeatMap(this.estudio, this.modelo);
+  HeatMap(this.estudio, this.modelo, {super.key});
 
   @override
   _HeatMapState createState() => _HeatMapState();
@@ -44,7 +44,7 @@ class _HeatMapState extends State<HeatMap> {
   @override
   void initState() {
     super.initState();
-    this.getData();
+    getData();
   }
 
   void getData() async {
@@ -63,8 +63,8 @@ class _HeatMapState extends State<HeatMap> {
     maxEste = limitesEste['maximo']!.ceil();
     minEste = limitesEste['minimo']!.floor();
 
-    this.rangoEste = getRango(minEste, maxEste);
-    this.rangoNorte = getRango(minNorte, maxNorte);
+    rangoEste = getRango(minEste, maxEste);
+    rangoNorte = getRango(minNorte, maxNorte);
 
     final xData = [];
     final yData = [];
@@ -79,13 +79,13 @@ class _HeatMapState extends State<HeatMap> {
     }
     contador0 = 0;
     print("Cantidad de incidencias: ${widget.estudio.muestreos.length}");
-    this.widget.estudio.muestreos.forEach((f) {
+    for (var f in widget.estudio.muestreos) {
       var indexX = f.norte.round() - minNorte;
       var indexy = f.este.round() - minEste;
       data[indexX][indexy] = f.incidencia.toDouble();
-    });
+    }
 
-    Krigeado k = new Krigeado(
+    Krigeado k = Krigeado(
         estudio: widget.estudio,
         modelo: widget.modelo,
         meseta: widget.estudio.meseta,
@@ -111,14 +111,13 @@ class _HeatMapState extends State<HeatMap> {
     dataString = "[";
     for (var i = minNorte; i <= maxNorte; i++) {
       for (var j = minEste; j <= maxEste; j++) {
-        dataString = dataString +
-            "[${i - minNorte}, ${j - minEste}, ${data[i - minNorte][j - minEste]}],";
+        dataString = "$dataString[${i - minNorte}, ${j - minEste}, ${data[i - minNorte][j - minEste]}],";
       }
     }
     dataString = dataString.substring(0, dataString.length - 1);
-    dataString = dataString + "]";
+    dataString = "$dataString]";
 
-    porcentajeInfestacion = this.calcularPorcentajeInfestacion();
+    porcentajeInfestacion = calcularPorcentajeInfestacion();
 
     setState(() {
       isLoading = false;
@@ -138,11 +137,11 @@ class _HeatMapState extends State<HeatMap> {
     _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mapa de densidad"),
+        title: const Text("Mapa de densidad"),
       ),
       body: SafeArea(
         child: isLoading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : _body(),
@@ -161,16 +160,16 @@ class _HeatMapState extends State<HeatMap> {
 
   Widget _porcentajeInfestacion() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         children: [
-          Text(
+          const Text(
             "% infestación: ",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text("${porcentajeInfestacion.toStringAsFixed(2)}")
+          Text(porcentajeInfestacion.toStringAsFixed(2))
         ],
       ),
     );
@@ -195,7 +194,7 @@ class _HeatMapState extends State<HeatMap> {
     }
 
     return Center(
-      child: Container(
+      child: SizedBox(
         height: _size.height * 0.83,
         width: _size.width,
         child: Echarts(

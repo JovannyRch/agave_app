@@ -29,19 +29,19 @@ class Parcela {
       };
 
   Future<String> get ultimoMuestreo async {
-    return ParcelasProvider.db.getLastMuestreo(this.id);
+    return ParcelasProvider.db.getLastMuestreo(id);
   }
 
   Future<int> get totalMuestreos async {
-    return ParcelasProvider.db.getMuestreos(this.id);
+    return ParcelasProvider.db.getMuestreos(id);
   }
 
   Future<List<String>> get fotos async {
-    return ParcelasProvider.db.getPhotos(this.id);
+    return ParcelasProvider.db.getPhotos(id);
   }
 
   void agregarFoto(String url) {
-    return ParcelasProvider.db.insertFoto(url, this.id);
+    return ParcelasProvider.db.insertFoto(url, id);
   }
 
   Future<int> eliminarFoto(String url) async {
@@ -49,10 +49,10 @@ class Parcela {
   }
 
   Future<int> get totalEstudios async {
-    return ParcelasProvider.db.totalEstudios(this.id);
+    return ParcelasProvider.db.totalEstudios(id);
   }
 
   Future<String> get plagaPrincipal async {
-    return ParcelasProvider.db.plagaPrincipal(this.id);
+    return ParcelasProvider.db.plagaPrincipal(id);
   }
 }

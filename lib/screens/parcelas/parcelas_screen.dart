@@ -7,24 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ParcelasScreen extends StatefulWidget {
+  const ParcelasScreen({super.key});
+
   @override
   _ParcelasScreenState createState() => _ParcelasScreenState();
 }
 
 class _ParcelasScreenState extends State<ParcelasScreen> {
-  ParcelasBloc parcelasBloc = new ParcelasBloc();
+  ParcelasBloc parcelasBloc = ParcelasBloc();
 
   late BuildContext globalContext;
 
   @override
   Widget build(BuildContext context) {
     parcelasBloc.getDatos();
-    this.globalContext = context;
+    globalContext = context;
     return Scaffold(
       body: SafeArea(
         child: Container(
           child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,12 +53,13 @@ class _ParcelasScreenState extends State<ParcelasScreen> {
     return StreamBuilder(
       stream: parcelasBloc.parcelas,
       builder: (BuildContext context, AsyncSnapshot<List<Parcela>> snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
         if (snapshot.hasData) {
           List<Parcela> parcelas = snapshot.data ?? [];
-          if (parcelas.length == 0) {
-            return Container(
+          if (parcelas.isEmpty) {
+            return const SizedBox(
                 height: 500.0,
                 child: Center(
                   child: Text("No hay registros de parcelas"),
@@ -76,16 +79,16 @@ class _ParcelasScreenState extends State<ParcelasScreen> {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-          this.globalContext,
+          globalContext,
           MaterialPageRoute(builder: (context) => ParcelaDetails(p)),
         );
       },
       child: Container(
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           horizontal: 20.0,
           vertical: 5.0,
         ),
-        padding: EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
           color: kTextTitle.withOpacity(0.15),
           borderRadius: BorderRadius.circular(7.0),
@@ -93,7 +96,7 @@ class _ParcelasScreenState extends State<ParcelasScreen> {
         child: Row(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(right: 5.0),
+              margin: const EdgeInsets.only(right: 5.0),
               child: Image.asset(
                 'images/aguacate.png',
                 width: 40.0,
@@ -104,17 +107,17 @@ class _ParcelasScreenState extends State<ParcelasScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Hero(
+                    tag: p.id,
                     child: Text(
                       p.descripcion,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 17.0,
                         color: kTextTitle,
                       ),
                     ),
-                    tag: p.id,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5.0,
                   ),
                   Text(
@@ -128,7 +131,7 @@ class _ParcelasScreenState extends State<ParcelasScreen> {
                 ],
               ),
             ),
-            FaIcon(
+            const FaIcon(
               FontAwesomeIcons.chevronRight,
               color: kTextTitle,
             )
@@ -140,47 +143,47 @@ class _ParcelasScreenState extends State<ParcelasScreen> {
 }
 
 class _FullScreenDialog extends StatelessWidget {
-  final TextEditingController controllerNombre = new TextEditingController();
+  final TextEditingController controllerNombre = TextEditingController();
   final TextEditingController controllerSuperficie =
-      new TextEditingController();
+      TextEditingController();
 
-  final ParcelasBloc parcelasBloc = new ParcelasBloc();
+  final ParcelasBloc parcelasBloc = ParcelasBloc();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text(
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text(
           "Agregar parcela",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: ThemeData().scaffoldBackgroundColor,
       ),
       body: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 30.0,
               ),
               TextField(
                 autofocus: true,
                 controller: controllerNombre,
                 textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Escriba el nombre de la parcela',
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               TextField(
                 controller: controllerSuperficie,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: 'Superficie', helperText: "en m\u00B2"),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               _buttons(context),
             ],
           ),
@@ -198,7 +201,7 @@ class _FullScreenDialog extends StatelessWidget {
           String nombre = controllerNombre.text;
           double superficie = double.parse(controllerSuperficie.text);
           if (nombre != "" && superficie >= 0) {
-            Parcela p = new Parcela(
+            Parcela p = Parcela(
               id: -1,
               descripcion: nombre,
               superficie: superficie,
@@ -211,7 +214,7 @@ class _FullScreenDialog extends StatelessWidget {
             return Navigator.pop(context, false);
           }
         },
-        child: Text(
+        child: const Text(
           "Agregar",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -220,7 +223,7 @@ class _FullScreenDialog extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Text(
+        child: const Text(
           "Cancelar",
           style: TextStyle(color: Colors.grey),
         ),

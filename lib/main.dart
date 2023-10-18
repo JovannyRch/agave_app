@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primaryColor: Colors.black),
       debugShowCheckedModeBanner: false,
       title: 'Agave App',
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }

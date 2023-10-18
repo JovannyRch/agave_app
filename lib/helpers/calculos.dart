@@ -159,7 +159,7 @@ class Calculos {
         mediaIncidencias,
         mediaDistancias);
 
-    return new Coeficientes(
+    return Coeficientes(
       covarianza: covarianza,
       curtosis: coeficienteDeCurtosis,
       varianza: coeficienteDeVariacion,
@@ -273,7 +273,7 @@ class Calculos {
       double distancia = distancias[i];
       distancia = double.parse(distancia.toStringAsFixed(2));
       incidencia = double.parse(incidencia.toStringAsFixed(2));
-      final cD = new ChartData(distancia, incidencia);
+      final cD = ChartData(distancia, incidencia);
       semivariograma2.add(cD);
     }
 

@@ -14,7 +14,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class EstudiosScreen extends StatefulWidget {
   Parcela parcela;
 
-  EstudiosScreen(@required this.parcela);
+  EstudiosScreen(@required this.parcela, {super.key});
 
   @override
   _EstudiosScreenState createState() => _EstudiosScreenState();
@@ -22,26 +22,26 @@ class EstudiosScreen extends StatefulWidget {
 
 class _EstudiosScreenState extends State<EstudiosScreen> {
   late BuildContext globalContext;
-  EstudiosBloc estudiosBloc = new EstudiosBloc();
+  EstudiosBloc estudiosBloc = EstudiosBloc();
 
   late Parcela p;
   int total = 0;
 
   @override
   void initState() {
-    this.p = widget.parcela;
+    p = widget.parcela;
     estudiosBloc.parcelasId = widget.parcela.id;
-    this.estudiosBloc.getDatos();
+    estudiosBloc.getDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    this.globalContext = context;
+    globalContext = context;
     final body = SafeArea(
       child: Container(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +58,7 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
                     ));
               }),
               Container(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 20.0,
                 ),
                 child: Row(
@@ -66,7 +66,7 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
                     Expanded(
                       child: Text(
                         "Parcela: ${widget.parcela.descripcion}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -74,7 +74,7 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               loadData(),
             ],
           ),
@@ -90,14 +90,15 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
     return StreamBuilder(
       stream: estudiosBloc.estudios,
       builder: (BuildContext context, AsyncSnapshot<List<Estudio>> snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
         if (snapshot.hasData) {
           List<Estudio> parcelas = snapshot.data ?? [];
           total = parcelas.length;
 
-          if (parcelas.length == 0) {
-            return Container(
+          if (parcelas.isEmpty) {
+            return const SizedBox(
                 height: 500.0,
                 child: Center(
                   child: Text("No se han hecho estudios"),
@@ -117,17 +118,17 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-          this.globalContext,
+          globalContext,
           MaterialPageRoute(
               builder: (context) => EstudiosDetail(e, widget.parcela)),
         );
       },
       child: Container(
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           horizontal: 20.0,
           vertical: 5.0,
         ),
-        padding: EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
           color: kTextTitle.withOpacity(0.1),
           borderRadius: BorderRadius.circular(7.0),
@@ -135,7 +136,7 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
         child: Row(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(right: 5.0),
+              margin: const EdgeInsets.only(right: 5.0),
               child: Image.asset(
                 'images/lupa2.png',
                 width: 40.0,
@@ -146,17 +147,17 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Hero(
+                    tag: e.id ?? 0,
                     child: Text(
                       "Estudio ${e.id}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 17.0,
                         color: kTextTitle,
                       ),
                     ),
-                    tag: e.id ?? 0,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5.0,
                   ),
                   Text(
@@ -167,7 +168,7 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
                       color: kTextTitle.withOpacity(0.5),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5.0,
                   ),
                   Text(
@@ -178,7 +179,7 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
                       color: kTextTitle.withOpacity(0.5),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5.0,
                   ),
                   Text(
@@ -193,7 +194,7 @@ class _EstudiosScreenState extends State<EstudiosScreen> {
                 ],
               ),
             ),
-            FaIcon(
+            const FaIcon(
               FontAwesomeIcons.chevronRight,
               color: kTextTitle,
             )
@@ -214,16 +215,16 @@ class _FullScreenDialog extends StatefulWidget {
 }
 
 class __FullScreenDialogState extends State<_FullScreenDialog> {
-  TextEditingController controllerHumedad = new TextEditingController();
-  TextEditingController controllerTemperatura = new TextEditingController();
+  TextEditingController controllerHumedad = TextEditingController();
+  TextEditingController controllerTemperatura = TextEditingController();
 
   String value = '1';
-  EstudiosBloc estudiosBloc = new EstudiosBloc();
-  final key = new GlobalKey<ScaffoldState>();
+  EstudiosBloc estudiosBloc = EstudiosBloc();
+  final key = GlobalKey<ScaffoldState>();
   @override
   void initState() {
-    this.value = "${widget.plagas[0].id}";
-    print("$value");
+    value = "${widget.plagas[0].id}";
+    print(value);
     /* options = widget.plagas
         .map((p) => S2Choice(value: "${p.id}", title: p.nombre))
         .toList();
@@ -236,19 +237,19 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
     return Scaffold(
       key: key,
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
-        title: Text(
+        title: const Text(
           "Crear estudio",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: ThemeData().scaffoldBackgroundColor,
       ),
       body: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Container(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
               border: Border.all(
                   color: kTextTitle.withOpacity(
@@ -257,19 +258,19 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   height: 30.0,
                 ),
                 DropdownButtonFormField(
                   value: value,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Plaga',
                     helperText: 'Selecciona la plaga',
                   ),
                   items: widget.plagas
                       .map((p) => DropdownMenuItem(
-                            child: Text(p.nombre),
                             value: "${p.id}",
+                            child: Text(p.nombre),
                           ))
                       .toList(),
                   onChanged: (value) {
@@ -278,27 +279,27 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
                     });
                   },
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 TextField(
                   controller: controllerHumedad,
                   textCapitalization: TextCapitalization.sentences,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Ingresa la humedad',
                     helperText: 'En una escala del 0% al 100%',
                   ),
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 TextField(
                   controller: controllerTemperatura,
                   textCapitalization: TextCapitalization.sentences,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Ingresa la temperatura',
                     helperText: 'En C°',
                   ),
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 _buttons(context),
               ],
             ),
@@ -358,7 +359,7 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Text(
+        child: const Text(
           "Cancelar",
         ),
       )

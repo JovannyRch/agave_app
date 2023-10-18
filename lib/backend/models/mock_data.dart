@@ -3,7 +3,7 @@ import 'package:agave_app/backend/models/muestreo_model.dart';
 class Mock {
   static createMuestreo(
       double este, double norte, int incidencia, int estudioId) {
-    return new Muestreo(
+    return Muestreo(
         id: -1,
         latitud: 10.0,
         longitud: 10.0,

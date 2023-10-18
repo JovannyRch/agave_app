@@ -42,7 +42,7 @@ class ParcelasProvider {
   Future<Parcela?> getById(int id) async {
     final db = await database;
     final res = await db!.query(tabla, where: 'id = ?', whereArgs: [id]);
-    return res!.isNotEmpty ? Parcela.fromJson(res.first) : null;
+    return res.isNotEmpty ? Parcela.fromJson(res.first) : null;
   }
 
   Future<List<Parcela>> getAll() async {
@@ -86,14 +86,14 @@ class ParcelasProvider {
     final res = await db!.rawQuery(
         "SELECT count(id) total from estudios where parcelaId = $parcelaId");
 
-    return res.length == 0 ? 0 : int.parse(res.first['total'].toString());
+    return res.isEmpty ? 0 : int.parse(res.first['total'].toString());
   }
 
   Future<String> getLastMuestreo(int parcelaId) async {
     final db = await database;
     final res = await db!.rawQuery(
         "SELECT createdAt from estudios where parcelaId = $parcelaId order by createdAt desc limit 1 ");
-    return res.length == 0 ? "--" : res.first['createdAt'].toString();
+    return res.isEmpty ? "--" : res.first['createdAt'].toString();
   }
 
   Future<List<String>> getPhotos(int parcelaId) async {

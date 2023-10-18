@@ -18,7 +18,7 @@ class EstudiosBloc {
   Stream<List<Estudio>> get estudios => _dataController.stream;
 
   dispose() {
-    _dataController?.close();
+    _dataController.close();
   }
 
   getDatos() async {

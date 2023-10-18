@@ -1,6 +1,6 @@
 import 'package:agave_app/backend/models/plaga_model.dart';
 
-final String kDBname = "ahuacatl_database";
+const String kDBname = "ahuacatl_database";
 List<String> males = [
   'Araña Roja',
   'Barrenador de la rama',
@@ -22,13 +22,13 @@ List<String> males = [
   'Fusariosis',
 ];
 
-final tablaCultivos = "CREATE TABLE  IF NOT EXISTS cultivos"
+const tablaCultivos = "CREATE TABLE  IF NOT EXISTS cultivos"
     "(id INEGER PRIMARY KEY,"
     "nombre TEXT"
     ")";
-final queryAguacate = "INSERT INTO cultivos(id, nombre) VALUES(1,'Aguacate')";
+const queryAguacate = "INSERT INTO cultivos(id, nombre) VALUES(1,'Aguacate')";
 
-final tablaParcelas = "CREATE TABLE  IF NOT EXISTS parcelas"
+const tablaParcelas = "CREATE TABLE  IF NOT EXISTS parcelas"
     "(id INTEGER PRIMARY KEY,"
     "descripcion TEXT,"
     "cultivoId INTEGER default 1,"
@@ -37,19 +37,19 @@ final tablaParcelas = "CREATE TABLE  IF NOT EXISTS parcelas"
     "FOREIGN KEY(cultivoId) REFERENCES cultivos(id) ON DELETE CASCADE"
     ")";
 
-final tablaFotos = "CREATE TABLE IF NOT EXISTS fotos"
+const tablaFotos = "CREATE TABLE IF NOT EXISTS fotos"
     "(id INTEGER PRIMARY KEY,"
     "url TEXT,"
     "parcelaId INTEGER,"
     "FOREIGN KEY(parcelaId) REFERENCES parcelas(id) ON DELETE CASCADE"
     ")";
 
-final tablaPlagas = "CREATE TABLE  IF NOT EXISTS plagas"
+const tablaPlagas = "CREATE TABLE  IF NOT EXISTS plagas"
     "(id INTEGER PRIMARY KEY,"
     "nombre TEXT"
     ")";
 
-final tablaEstudios = "CREATE TABLE IF NOT EXISTS estudios"
+const tablaEstudios = "CREATE TABLE IF NOT EXISTS estudios"
     "(id INTEGER PRIMARY KEY,"
     "createdAt TEXT,"
     "temperatura REAL,"
@@ -65,7 +65,7 @@ final tablaEstudios = "CREATE TABLE IF NOT EXISTS estudios"
     "FOREIGN KEY(plagaId) REFERENCES plagas(id) ON DELETE CASCADE"
     ")";
 
-final tablaMuestreos = "CREATE TABLE IF NOT EXISTS muestreos"
+const tablaMuestreos = "CREATE TABLE IF NOT EXISTS muestreos"
     "(id INTEGER PRIMARY KEY,"
     "latitud REAL,"
     "longitud REAL,"

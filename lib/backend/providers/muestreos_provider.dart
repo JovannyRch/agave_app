@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class MuestreosProvider {
-  static Database? _database = null;
+  static Database? _database;
   static final MuestreosProvider db = MuestreosProvider._();
 
   String dbName = kDBname;
@@ -50,7 +50,7 @@ class MuestreosProvider {
   Future<int> total(String table) async {
     final db = await database;
     final res = await db!.rawQuery("SELECT count(*) total from $table");
-    if (res.length == 0) return 0;
+    if (res.isEmpty) return 0;
     return int.parse(res.first['total'].toString());
   }
 }

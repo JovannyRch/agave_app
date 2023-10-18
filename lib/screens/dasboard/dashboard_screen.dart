@@ -6,44 +6,46 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DashBoardScreen extends StatefulWidget {
+  const DashBoardScreen({super.key});
+
   @override
   _DashBoardScreenState createState() => _DashBoardScreenState();
 }
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
   int currentIndex = 0;
-  ReportesModel reportes = new ReportesModel();
+  ReportesModel reportes = ReportesModel();
   int totalParcelas = 0;
   int totalMuestreos = 0;
   int totalIncidencias = 0;
   int totalEstudios = 0;
   List<Map<String, dynamic>> reportePlagas = [];
   List<Color> colores = [
-    Color(0xff0293ee),
-    Color(0xfff8b250),
-    Color(0xff845bef),
-    Color(0xff13d38e),
-    Color(0xff805a10),
+    const Color(0xff0293ee),
+    const Color(0xfff8b250),
+    const Color(0xff845bef),
+    const Color(0xff13d38e),
+    const Color(0xff805a10),
   ];
   late Size size;
   bool isLoading = true;
   int touchedIndex = 0;
   @override
   void initState() {
-    this.isLoading = true;
-    this.loadData();
+    isLoading = true;
+    loadData();
     super.initState();
   }
 
   void loadData() async {
-    this.totalParcelas = await reportes.totalParcelas();
-    this.totalMuestreos = await reportes.totalMuestreos();
-    this.totalEstudios = await reportes.totalEstudios();
-    this.totalIncidencias = await reportes.totalIncidencias();
-    this.reportePlagas = await reportes.reportePlagas();
-    print("Total parcelas: ${this.totalParcelas}");
+    totalParcelas = await reportes.totalParcelas();
+    totalMuestreos = await reportes.totalMuestreos();
+    totalEstudios = await reportes.totalEstudios();
+    totalIncidencias = await reportes.totalIncidencias();
+    reportePlagas = await reportes.reportePlagas();
+    print("Total parcelas: $totalParcelas");
     setState(() {
-      this.isLoading = false;
+      isLoading = false;
     });
   }
 
@@ -51,14 +53,14 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     if (isLoading) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
     return Scaffold(
       body: Container(
         width: double.infinity,
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: 10.0,
           left: 10.0,
         ),
@@ -66,10 +68,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             //_title(),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              decoration: const BoxDecoration(),
+              child: const Text(
                 "Principales plagas",
                 style: TextStyle(
                   fontSize: 18.0,
@@ -77,15 +80,14 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              decoration: BoxDecoration(),
             ),
-            Divider(height: 25.0),
+            const Divider(height: 25.0),
             _indicators(),
-            SizedBox(height: 25.0),
+            const SizedBox(height: 25.0),
             _graph(),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             _rowReport(),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
           ],
         ),
       ),
@@ -95,7 +97,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   Widget _indicators() {
     List<Widget> indicators = [];
     int i = 0;
-    for (Map<String, dynamic> data in this.reportePlagas) {
+    for (Map<String, dynamic> data in reportePlagas) {
       indicators.add(
         Indicator(
           color: colores[i],
@@ -132,7 +134,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             totalEstudios == 1 ? "Muestreo" : "Muestreos"),
         _containerInfo(
             FontAwesomeIcons.bug,
-            totalIncidencias == null ? 0 : totalIncidencias,
+            totalIncidencias ?? 0,
             totalIncidencias == 1 ? "Incidencia" : "Incidencias"),
       ],
     );
@@ -142,8 +144,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            decoration: const BoxDecoration(),
+            child: const Text(
               "Reporte general",
               style: TextStyle(
                 fontSize: 18.0,
@@ -151,9 +154,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            decoration: BoxDecoration(),
           ),
-          Divider(height: 1),
+          const Divider(height: 1),
           row,
           row2,
         ],
@@ -165,7 +167,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     return Container(
       height: 75.0,
       width: size.width * 0.35,
-      padding: EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.05),
+          border: Border.all(color: Colors.black, width: 0.2),
+          borderRadius: BorderRadius.circular(7.0)),
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -176,13 +182,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               size: 20.0,
               color: kTextTitle.withOpacity(0.54),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10.0,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: 7.0),
+                const SizedBox(height: 7.0),
                 Text(
                   "$amount",
                   style: TextStyle(
@@ -194,7 +200,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 ),
                 Text(
                   text,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15.0,
                     color: Colors.black,
                   ),
@@ -204,18 +210,14 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           ],
         ),
       ),
-      decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.05),
-          border: Border.all(color: Colors.black, width: 0.2),
-          borderRadius: BorderRadius.circular(7.0)),
     );
   }
 
   Widget _graph() {
-    if (reportePlagas.length == 0) {
-      return Container(
+    if (reportePlagas.isEmpty) {
+      return SizedBox(
         height: size.height * 0.4,
-        child: Center(
+        child: const Center(
           child: Text(
             "No hay suficientes datos disponibles",
             style: TextStyle(
@@ -226,7 +228,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       );
     }
     return Container(
-      padding: EdgeInsets.only(right: 10.0),
+      padding: const EdgeInsets.only(right: 10.0),
       width: double.infinity,
       height: size.height * 0.4,
       child: PieChart(
@@ -254,17 +256,17 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   List<PieChartSectionData> showingSections() {
     List<PieChartSectionData> items = [];
-    for (int i = 0; i < this.reportePlagas.length; ++i) {
+    for (int i = 0; i < reportePlagas.length; ++i) {
       Map<String, dynamic> data = reportePlagas[i];
       items.add(PieChartSectionData(
         color: colores[i].withOpacity(0.7),
         value: double.parse(data['total'].toString()),
         title: data['total'].toString(),
         radius: 80,
-        titleStyle: TextStyle(
+        titleStyle: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: const Color(0xff044d7c)),
+            color: Color(0xff044d7c)),
         titlePositionPercentageOffset: 0.55,
       ));
     }
@@ -281,11 +283,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       child: Container(
         height: 40.0,
         width: 80.0,
-        child: Center(
-            child: Text(
-          text,
-          style: TextStyle(color: kTextTitle),
-        )),
         decoration: BoxDecoration(
             border: Border.all(
               color: (currentIndex == index)
@@ -295,6 +292,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             borderRadius: BorderRadius.circular(
               5.0,
             )),
+        child: Center(
+            child: Text(
+          text,
+          style: const TextStyle(color: kTextTitle),
+        )),
       ),
     );
   }
@@ -303,7 +305,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
+        const Text(
           "Informe",
           style: TextStyle(
             fontFamily: 'Source Sans Pro',
@@ -314,10 +316,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           ),
         ),
         Container(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             left: 50.0,
           ),
-          child: Text(
+          child: const Text(
             "Resumido",
             style: TextStyle(
               fontFamily: 'Source Sans Pro',

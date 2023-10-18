@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class BottomNavBar extends StatelessWidget {
   final currentIndex;
 
-  BottomNavBar({this.currentIndex = 0});
+  const BottomNavBar({super.key, this.currentIndex = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +19,13 @@ class BottomNavBar extends StatelessWidget {
             case 0:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
               );
               break;
             case 1:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => ParcelasScreen()),
+                MaterialPageRoute(builder: (context) => const ParcelasScreen()),
               );
               break;
             default:

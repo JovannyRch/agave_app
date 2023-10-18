@@ -7,7 +7,7 @@ class Indicator extends StatelessWidget {
   final double size;
   final Color textColor;
 
-  const Indicator({
+  const Indicator({super.key, 
     required this.color,
     required this.text,
     required this.isSquare,
@@ -27,7 +27,7 @@ class Indicator extends StatelessWidget {
             color: color,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Text(

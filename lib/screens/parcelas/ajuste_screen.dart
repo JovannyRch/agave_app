@@ -2,7 +2,6 @@ import 'package:agave_app/backend/ajuste_model.dart';
 import 'package:agave_app/backend/models/chart_data.dart';
 import 'package:agave_app/backend/models/muestreo_model.dart';
 import 'package:agave_app/helpers/calculos.dart';
-import 'package:agave_app/screens/parcelas/semivariograma_screen.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:sample_statistics/sample_statistics.dart';
@@ -16,7 +15,7 @@ class AjusteScreen extends StatefulWidget {
   final List<double> valoresModelo;
   List<ChartData> chartData = [];
 
-  AjusteScreen({
+  AjusteScreen({super.key, 
     required this.ajuste,
     required this.modelo,
     required this.muestreos,
@@ -89,22 +88,22 @@ class _AjusteScreenState extends State<AjusteScreen> {
      */
 
     valoresModelos2 = [...widget.valoresModelo];
-    graphData = this.getGraphData();
+    graphData = getGraphData();
     setIsFixing(true);
     hacerCalculos();
     setIsFixing(false);
   }
 
   void hacerCalculos() {
-    Calculos calculos = new Calculos();
+    Calculos calculos = Calculos();
     List<double> incidencias =
-        this.widget.muestreos.map((e) => e.incidencia.toDouble()).toList();
+        widget.muestreos.map((e) => e.incidencia.toDouble()).toList();
     Stats distanciaStats =
         Stats(widget.chartData.map((e) => e.distancia).toList());
     Stats semivariogramaStats =
         Stats(widget.chartData.map((e) => e.semivariograma).toList());
-    this.maxMeseta = semivariogramaStats.max.toDouble();
-    this.maxRango = distanciaStats.max.toDouble();
+    maxMeseta = semivariogramaStats.max.toDouble();
+    maxRango = distanciaStats.max.toDouble();
 
     coeficientes = calculos.mainCalculo(widget.distanciasSemivariograma,
         widget.incidenciaSemivariograma, incidencias);
@@ -115,7 +114,7 @@ class _AjusteScreenState extends State<AjusteScreen> {
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ajuste"),
+        title: const Text("Ajuste"),
       ),
       body: _body(),
     );
@@ -138,7 +137,7 @@ class _AjusteScreenState extends State<AjusteScreen> {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,7 +153,7 @@ class _AjusteScreenState extends State<AjusteScreen> {
                     "${formatNumber(coeficientes.asimetria)}", "C. Asimetría"),
               ],
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -166,7 +165,7 @@ class _AjusteScreenState extends State<AjusteScreen> {
                 _cardDetail("${0.0}", "Moda"), //FIX: Mode
               ],
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -174,7 +173,7 @@ class _AjusteScreenState extends State<AjusteScreen> {
                 _cardDetail("${cuartiles[2]}", "3er Cuartil"),
               ],
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -182,18 +181,18 @@ class _AjusteScreenState extends State<AjusteScreen> {
                 _cardDetail("${formatNumber(coeficientes.stats.min)}", "Min"),
               ],
             ),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Ecuación de Regresión líneal = "),
+                const Text("Ecuación de Regresión líneal = "),
                 Text(
                     "${formatNumber(coeficientes.regresionLineal.a)} + ${formatNumber(coeficientes.regresionLineal.b)}X")
               ],
             ),
             _grafica(),
             _details(),
-            SizedBox(height: 30.0),
+            const SizedBox(height: 30.0),
           ],
         ),
       ),
@@ -203,17 +202,17 @@ class _AjusteScreenState extends State<AjusteScreen> {
   Widget _details() {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.only(top: 10.0),
+      margin: const EdgeInsets.only(top: 10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _cardDetail("${widget.modelo}", "Modelo"),
+              _cardDetail(widget.modelo, "Modelo"),
             ],
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -241,14 +240,14 @@ class _AjusteScreenState extends State<AjusteScreen> {
         children: <Widget>[
           Text(
             main,
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 5.0),
+          const SizedBox(height: 5.0),
           Text(
             secondary,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13.0),
+            style: const TextStyle(fontSize: 13.0),
           ),
         ],
       ),
@@ -261,7 +260,7 @@ class _AjusteScreenState extends State<AjusteScreen> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Ajuste no válido"),
+          const Text("Ajuste no válido"),
           Text(message),
         ],
       )),
@@ -270,7 +269,7 @@ class _AjusteScreenState extends State<AjusteScreen> {
 
   Widget _loading() {
     return Container(
-      child: Center(child: CircularProgressIndicator()),
+      child: const Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -329,7 +328,7 @@ class _AjusteScreenState extends State<AjusteScreen> {
           isCurved: true,
           barWidth: 4,
           isStrokeCapRound: true,
-          dotData: FlDotData(
+          dotData: const FlDotData(
             show: false,
           ),
           belowBarData: BarAreaData(
@@ -374,9 +373,9 @@ class _AjusteScreenState extends State<AjusteScreen> {
     List<FlSpot> result = [];
     int n = widget.chartData.length;
     for (int i = 0; i < n; i++) {
-      double y = this.widget.valoresModelo[i];
-      double x = this.widget.chartData[i].distancia;
-      result.add(new FlSpot(x, y));
+      double y = widget.valoresModelo[i];
+      double x = widget.chartData[i].distancia;
+      result.add(FlSpot(x, y));
     }
 
     return result;
@@ -386,9 +385,9 @@ class _AjusteScreenState extends State<AjusteScreen> {
     List<FlSpot> result = [];
     int n = widget.chartData.length;
     for (int i = 0; i < n; i++) {
-      double y = this.valoresModelos2[i];
-      double x = this.widget.chartData[i].distancia;
-      result.add(new FlSpot(x, y));
+      double y = valoresModelos2[i];
+      double x = widget.chartData[i].distancia;
+      result.add(FlSpot(x, y));
     }
 
     return result;
@@ -399,8 +398,8 @@ class _AjusteScreenState extends State<AjusteScreen> {
     int n = widget.chartData.length;
     for (int i = 0; i < n; i++) {
       double y = widget.ajuste.meseta;
-      double x = this.widget.chartData[i].distancia;
-      result.add(new FlSpot(x, y));
+      double x = widget.chartData[i].distancia;
+      result.add(FlSpot(x, y));
     }
     return result;
   }
@@ -410,8 +409,8 @@ class _AjusteScreenState extends State<AjusteScreen> {
     int n = widget.chartData.length;
     for (int i = 0; i < n; i++) {
       double x = widget.ajuste.rango;
-      double y = this.widget.valoresModelo[i];
-      result.add(new FlSpot(x, y));
+      double y = widget.valoresModelo[i];
+      result.add(FlSpot(x, y));
     }
 
     return result;
@@ -438,13 +437,13 @@ class _AjusteScreenState extends State<AjusteScreen> {
       ],
     );
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             stack,

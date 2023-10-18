@@ -17,7 +17,7 @@ class ParcelasBloc {
   Stream<List<Parcela>> get parcelas => _dataController.stream;
 
   dispose() {
-    _dataController?.close();
+    _dataController.close();
   }
 
   getDatos() async {

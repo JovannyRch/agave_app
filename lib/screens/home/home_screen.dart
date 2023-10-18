@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -19,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: IndexedStack(
           index: currentIndex,
-          children: <Widget>[
+          children: const <Widget>[
             DashBoardScreen(),
             ParcelasScreen(),
             MoreScreen(),
@@ -40,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }
       },
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: FaIcon(FontAwesomeIcons.home),
           label: "Inicio",

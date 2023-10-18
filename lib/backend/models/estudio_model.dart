@@ -68,34 +68,34 @@ class Estudio {
       };
 
   Future<int> hacerCalculos() async {
-    media = await this.getPromedio;
-    nombrePlaga = await this.getPlaga;
+    media = await getPromedio;
+    nombrePlaga = await getPlaga;
     totalMuestreos = await getMuestras;
     totalIncidencias = await getIncidencias;
-    muestreos = await EstudiosProvider.db.getMuestreos(this.id ?? 0);
+    muestreos = await EstudiosProvider.db.getMuestreos(id ?? 0);
     varianza = calcularVarianza(muestreos);
     desviacionEstandar = sqrt(varianza);
     return 1;
   }
 
   Future<int> get getMuestras async {
-    return EstudiosProvider.db.totalMuestras(this.id ?? 0);
+    return EstudiosProvider.db.totalMuestras(id ?? 0);
   }
 
   Future<int> get getMuestreos async {
-    return EstudiosProvider.db.totalMuestras(this.id ?? 0);
+    return EstudiosProvider.db.totalMuestras(id ?? 0);
   }
 
   Future<int> get getIncidencias async {
-    return EstudiosProvider.db.incidencias(this.id ?? 0);
+    return EstudiosProvider.db.incidencias(id ?? 0);
   }
 
   Future<double> get getPromedio async {
-    return EstudiosProvider.db.getPromedio(this.id ?? 0);
+    return EstudiosProvider.db.getPromedio(id ?? 0);
   }
 
   Future<String> get getPlaga async {
-    return EstudiosProvider.db.getPlaga(this.plagaId);
+    return EstudiosProvider.db.getPlaga(plagaId);
   }
 
   Future<int> update() async {

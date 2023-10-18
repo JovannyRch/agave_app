@@ -7,12 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:agave_app/helpers/utils.dart' as utils;
 
 class ParcelaDetails extends StatefulWidget {
   final Parcela parcela;
 
-  ParcelaDetails(this.parcela);
+  const ParcelaDetails(this.parcela, {super.key});
 
   @override
   _ParcelaDetailsState createState() => _ParcelaDetailsState();
@@ -25,24 +24,24 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
   String ultimoMuestreo = "--";
   String plagaPrincipal = "--";
   ParcelasBloc parcelasBloc = ParcelasBloc();
-  final picker = new ImagePicker();
-  final key = new GlobalKey<ScaffoldState>();
+  final picker = ImagePicker();
+  final key = GlobalKey<ScaffoldState>();
   var connectivityResult;
   bool isOnline = false;
   @override
   void initState() {
     super.initState();
 
-    this.initData();
+    initData();
   }
 
   void initData() async {
-    this.p = widget.parcela;
-    int total = await this.p.totalEstudios;
-    this.totalMuestreos = "$total";
-    this.ultimoMuestreo = await this.p.ultimoMuestreo;
-    this.photos = await this.p.fotos;
-    this.plagaPrincipal = await this.p.plagaPrincipal;
+    p = widget.parcela;
+    int total = await p.totalEstudios;
+    totalMuestreos = "$total";
+    ultimoMuestreo = await p.ultimoMuestreo;
+    photos = await p.fotos;
+    plagaPrincipal = await p.plagaPrincipal;
 
     connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
@@ -59,7 +58,7 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    this.globalContext = context;
+    globalContext = context;
     return Scaffold(
       key: key,
       body: SafeArea(
@@ -73,9 +72,9 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
                 _btnMuestreo(),
               ],
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             _details(),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             _photos(),
           ],
         ),
@@ -87,7 +86,7 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
     if (!isOnline) {
       return Expanded(
         child: Container(
-          child: Center(
+          child: const Center(
             child: Text(
               "Conectate a una red para ver las fotos",
               style: TextStyle(
@@ -101,13 +100,13 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
     return Expanded(
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(
               children: <Widget>[
-                Expanded(
+                const Expanded(
                   child: Text(
                     "Fotos",
                     style: TextStyle(
@@ -118,14 +117,14 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
                 ),
                 InkWell(
                   onTap: () => _selectSource(),
-                  child: Text(
+                  child: const Text(
                     "Agregar foto",
                     style: TextStyle(color: Colors.black54),
                   ),
                 ),
               ],
             ),
-            Divider(color: Colors.black),
+            const Divider(color: Colors.black),
             Expanded(child: _gridPhotos()),
           ],
         ),
@@ -196,10 +195,10 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('Opciones'),
+            title: const Text('Opciones'),
             children: <Widget>[
               SimpleDialogOption(
-                  child: Row(
+                  child: const Row(
                     children: <Widget>[
                       Expanded(
                         child: Text('Eliminar'),
@@ -214,7 +213,7 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
                     Navigator.pop(context, 1);
                   }),
               SimpleDialogOption(
-                  child: Row(
+                  child: const Row(
                     children: <Widget>[
                       Expanded(
                         child: Text('Editar'),
@@ -229,7 +228,7 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
                     Navigator.pop(context, 2);
                   }),
               SimpleDialogOption(
-                child: Row(
+                child: const Row(
                   children: <Widget>[
                     Expanded(
                       child: Text('Subir a la base de datos global'),
@@ -251,10 +250,10 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
       case 1:
         //Eliminar
         final bool respuesta =
-            await this._dialogConfirm("¿Estás seguro de eliminar el registro?");
+            await _dialogConfirm("¿Estás seguro de eliminar el registro?");
 
-        if (respuesta != null && respuesta) {
-          parcelasBloc.deleteData(this.p.id);
+        if (respuesta) {
+          parcelasBloc.deleteData(p.id);
           //utils.showMessage("Eliminación correcta", key);
           Navigator.of(context).pop();
         }
@@ -278,14 +277,14 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
               TextButton(
                 child: Text(
                   textMainButton,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
               ),
               TextButton(
-                child: Text(
+                child: const Text(
                   "Cancelar",
                   style: TextStyle(color: Colors.grey),
                 ),
@@ -299,7 +298,7 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
   }
 
   Widget _gridPhotos() {
-    return Center(child: Text("No se han cargado fotos"));
+    return const Center(child: Text("No se han cargado fotos"));
     /* if (this.photos.length == 0) {
       return Center(child: Text("No se han cargado fotos"));
     }
@@ -338,26 +337,26 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
 
   Widget _details() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
+          const Text(
             "Detalles",
             style: TextStyle(
               fontSize: 23.0,
               letterSpacing: 1.7,
             ),
           ),
-          SizedBox(height: 15.0),
+          const SizedBox(height: 15.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              _containerDetail("Superficie", "${this.p.superficie} m\u00B2"),
-              _containerDetail("Último estudio", "${this.ultimoMuestreo}"),
+              _containerDetail("Superficie", "${p.superficie} m\u00B2"),
+              _containerDetail("Último estudio", ultimoMuestreo),
             ],
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -372,26 +371,26 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
 
   Widget _containerDetail(String title, String text) {
     return Container(
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       width: size.width * 0.4,
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(title,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black54,
                 fontSize: 12.0,
               )),
-          SizedBox(height: 7.0),
+          const SizedBox(height: 7.0),
           Text(text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15.0,
               )),
         ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(5.0),
       ),
     );
   }
@@ -403,7 +402,7 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
       child: GestureDetector(
         onTap: () {
           Navigator.push(
-            this.globalContext,
+            globalContext,
             CupertinoPageRoute(builder: (context) => EstudiosScreen(p)),
           );
         },
@@ -415,7 +414,7 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
               borderRadius: BorderRadius.circular(
                 30.0,
               )),
-          child: Center(
+          child: const Center(
               child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -442,6 +441,16 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
     var mainContainer = Container(
       width: double.infinity,
       height: size.height * 0.23,
+      margin: const EdgeInsets.symmetric(horizontal: 7.0),
+      padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 14.0),
+      decoration: BoxDecoration(
+          color: kTextTitle.withOpacity(0.15),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3.0),
+            topRight: Radius.circular(3.0),
+            bottomLeft: Radius.circular(17.0),
+            bottomRight: Radius.circular(17.0),
+          )),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -450,22 +459,22 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
             children: <Widget>[
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Hero(
+                    tag: "title",
                     child: Text(
-                      this.p.descripcion,
-                      style: TextStyle(
+                      p.descripcion,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 37.0,
                         color: kTextTitle,
                       ),
                     ),
-                    tag: "title",
                   ),
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(right: 5.0),
+                margin: const EdgeInsets.only(right: 5.0),
                 child: Image.asset(
                   'images/aguacate.png',
                   width: 80.0,
@@ -475,16 +484,6 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
           ),
         ],
       ),
-      margin: EdgeInsets.symmetric(horizontal: 7.0),
-      padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 14.0),
-      decoration: BoxDecoration(
-          color: kTextTitle.withOpacity(0.15),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(3.0),
-            topRight: Radius.circular(3.0),
-            bottomLeft: Radius.circular(17.0),
-            bottomRight: Radius.circular(17.0),
-          )),
     );
     return Stack(
       children: <Widget>[
@@ -498,8 +497,8 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
 
   Widget _appBar(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5.0),
-      margin: EdgeInsets.only(bottom: 7.0),
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      margin: const EdgeInsets.only(bottom: 7.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -508,11 +507,11 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
               child: Container(
                 height: 40.0,
                 width: 40.0,
-                padding: EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(10.0),
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                 ),
-                child: FaIcon(
+                child: const FaIcon(
                   FontAwesomeIcons.chevronLeft,
                   color: kTextTitle,
                 ),
@@ -526,11 +525,11 @@ class _ParcelaDetailsState extends State<ParcelaDetails> {
             child: Container(
               height: 40.0,
               width: 40.0,
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(10.0),
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
               ),
-              child: FaIcon(
+              child: const FaIcon(
                 FontAwesomeIcons.ellipsisV,
                 size: 17.0,
                 color: kTextTitle,

@@ -23,7 +23,6 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../helpers/calculos.dart';
 
 /* 
 import 'package:geolocator/geolocator.dart'; */
@@ -31,7 +30,7 @@ import 'package:geolocator/geolocator.dart'; */
 class EstudiosDetail extends StatefulWidget {
   Estudio estudio;
   Parcela parcela;
-  EstudiosDetail(@required this.estudio, @required this.parcela);
+  EstudiosDetail(@required this.estudio, @required this.parcela, {super.key});
 
   @override
   _EstudiosDetailState createState() => _EstudiosDetailState();
@@ -42,18 +41,18 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
   late Parcela parcela;
   late BuildContext globalContext;
   int currentTabe = 0;
-  final key = new GlobalKey<ScaffoldState>();
-  EstudiosBloc estudiosBloc = new EstudiosBloc();
+  final key = GlobalKey<ScaffoldState>();
+  EstudiosBloc estudiosBloc = EstudiosBloc();
   @override
   void initState() {
     super.initState();
-    this.estudio = widget.estudio;
-    this.parcela = widget.parcela;
-    this.loadData();
+    estudio = widget.estudio;
+    parcela = widget.parcela;
+    loadData();
   }
 
   void loadData() async {
-    await this.estudio.hacerCalculos();
+    await estudio.hacerCalculos();
     setState(() {});
   }
 
@@ -74,17 +73,17 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
                 fullscreenDialog: true,
               ));
           if (res != null && res) {
-            this.loadData();
+            loadData();
           }
         },
-        child: FaIcon(
+        child: const FaIcon(
           FontAwesomeIcons.searchLocation,
         ),
       ),
       key: key,
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +94,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
                   rowButtons(),
                 ],
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               _cuerpo(),
             ],
           ),
@@ -108,7 +107,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
 
   Widget _cuerpo() {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
       ),
       child: Column(
@@ -116,12 +115,12 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _info(),
-          SizedBox(height: 17.0),
+          const SizedBox(height: 17.0),
           Text(
             "Tabla de registros",
             style: TextStyle(color: kTextTitle.withOpacity(0.7)),
           ),
-          Divider(),
+          const Divider(),
           _tabla(),
         ],
       ),
@@ -137,7 +136,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
           "Detalles",
           style: TextStyle(color: kTextTitle.withOpacity(0.7)),
         ),
-        Divider(),
+        const Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -145,12 +144,12 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
             _card("${estudio.totalIncidencias}", "Incidencias"),
           ],
         ),
-        SizedBox(height: 17.0),
+        const SizedBox(height: 17.0),
         Text(
           "Datos estadísticos",
           style: TextStyle(color: kTextTitle.withOpacity(0.7)),
         ),
-        Divider(),
+        const Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -160,17 +159,17 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
                 "Desviación estándar"),
           ],
         ),
-        SizedBox(height: 17.0),
+        const SizedBox(height: 17.0),
         Text(
           "Modelado",
           style: TextStyle(color: kTextTitle.withOpacity(0.7)),
         ),
-        Divider(),
+        const Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: estudio.modelo == null
               ? [
-                  Text(
+                  const Text(
                     "Estudio no ajustado",
                     style: TextStyle(color: Colors.grey),
                   ),
@@ -180,24 +179,24 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
                   _card("${formatNumber(estudio.rango)}", "Rango"),
                 ],
         ),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: estudio.modelo == null
               ? []
               : <Widget>[
                   _card("${formatNumber(estudio.pepita)}", "Efecto pepita"),
-                  _card("${estudio.modelo}", "Modelo"),
+                  _card(estudio.modelo, "Modelo"),
                 ],
         ),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: estudio.modelo == null
               ? []
               : <Widget>[
                   _card(
-                      "${labelNivelDependendencia(formatNumber(estudio.pepita / estudio.meseta))}",
+                      labelNivelDependendencia(formatNumber(estudio.pepita / estudio.meseta)),
                       "Nivel de dependencia espacial"),
                 ],
         ),
@@ -232,7 +231,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
       "Incidencias",
     ]);
 
-    if (estudio.muestreos.length != 0) {
+    if (estudio.muestreos.isNotEmpty) {
       for (int i = 0; i < estudio.muestreos.length; i++) {
         List<dynamic> row = [];
         row.add(estudio.muestreos[i].norte);
@@ -244,7 +243,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
       File f = await _localFile;
       print("F.path");
       print(f.path);
-      this.filePath = f.path;
+      filePath = f.path;
       String csv = const ListToCsvConverter().convert(rows);
       f.writeAsString(csv);
     }
@@ -277,12 +276,12 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
   Widget btnShare() {
     var gestureDetector = GestureDetector(
       onTap: () {
-        this.getCsv();
-        this.sendMailAndAttachment();
+        getCsv();
+        sendMailAndAttachment();
       },
       child: Container(
         width: 120.0,
-        padding: EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
         decoration: BoxDecoration(
             border: Border.all(color: kTextTitle.withOpacity(0.7)),
             borderRadius: BorderRadius.circular(20.0)),
@@ -293,7 +292,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
               "Compartir",
               style: TextStyle(color: kTextTitle.withOpacity(0.7)),
             ),
-            SizedBox(width: 10.0),
+            const SizedBox(width: 10.0),
             FaIcon(FontAwesomeIcons.solidShareSquare,
                 size: 13.0, color: kTextTitle.withOpacity(0.7)),
           ],
@@ -307,8 +306,8 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
   }
 
   Widget _tabla() {
-    if (this.estudio.muestreos.length == 0) {
-      return Container(
+    if (estudio.muestreos.isEmpty) {
+      return const SizedBox(
           height: 100.0,
           child: Center(
               child: Text(
@@ -320,7 +319,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
     List<DataRow> rows = [];
     int i = 1;
     List<int> incidencias = [];
-    this.estudio.muestreos.forEach((p) {
+    for (var p in estudio.muestreos) {
       DataCell c0 = DataCell(Text(i.toString()));
       DataCell c1 = DataCell(Text(p.norte.toString()));
       DataCell c2 = DataCell(Text(p.este.toString()));
@@ -329,13 +328,13 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
       rows.add(DataRow(cells: [c0, c1, c2, c3]));
       incidencias.add(int.parse(p.incidencia.toString()));
       i++;
-    });
-    return Container(
+    }
+    return SizedBox(
       height: 200.0,
       child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: DataTable(
-          columns: <DataColumn>[
+          columns: const <DataColumn>[
             DataColumn(
                 label:
                     Text('N', style: TextStyle(fontWeight: FontWeight.bold))),
@@ -381,17 +380,17 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
         children: <Widget>[
           Text(
             main,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 5.0),
+          const SizedBox(height: 5.0),
           Text(
             secondary,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13.0),
+            style: const TextStyle(fontSize: 13.0),
           ),
         ],
       ),
@@ -401,7 +400,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
   Widget rowButtons() {
     return Positioned(
       bottom: 10.0,
-      child: Container(
+      child: SizedBox(
         width: size.width,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -412,7 +411,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
               icon: FontAwesomeIcons.solidSun,
               isCurrent: true,
               function: () {
-                if (estudio.muestreos.length != 0) {
+                if (estudio.muestreos.isNotEmpty) {
                   Modelo m = getModelo(estudio.modelo);
 
                   Navigator.push(
@@ -446,7 +445,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
 
     if (isAjustado()) {
       List<ChartData> data = Calculos.calcularSemivariograma(estudio);
-      Ajuste ajuste = new Ajuste(
+      Ajuste ajuste = Ajuste(
         meseta: estudio.meseta,
         pepita: estudio.pepita,
         rango: estudio.rango,
@@ -489,6 +488,16 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
     var mainContainer = Container(
       width: double.infinity,
       height: size.height * 0.30,
+      margin: const EdgeInsets.symmetric(horizontal: 7.0),
+      padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 14.0),
+      decoration: BoxDecoration(
+          color: kTextTitle.withOpacity(0.15),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3.0),
+            topRight: Radius.circular(3.0),
+            bottomLeft: Radius.circular(17.0),
+            bottomRight: Radius.circular(17.0),
+          )),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -497,21 +506,21 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
             children: <Widget>[
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Hero(
+                        tag: "title",
                         child: Text(
-                          "Estudio ${this.estudio.id}",
-                          style: TextStyle(
+                          "Estudio ${estudio.id}",
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 37.0,
                             color: kTextTitle,
                           ),
                         ),
-                        tag: "title",
                       ),
                       Text(
                         "Plaga: ${estudio.nombrePlaga}",
@@ -536,7 +545,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(right: 5.0),
+                margin: const EdgeInsets.only(right: 5.0),
                 child: Image.asset(
                   'images/lupa2.png',
                   width: 80.0,
@@ -546,16 +555,6 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
           ),
         ],
       ),
-      margin: EdgeInsets.symmetric(horizontal: 7.0),
-      padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 14.0),
-      decoration: BoxDecoration(
-          color: kTextTitle.withOpacity(0.15),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(3.0),
-            topRight: Radius.circular(3.0),
-            bottomLeft: Radius.circular(17.0),
-            bottomRight: Radius.circular(17.0),
-          )),
     );
     return Stack(
       children: <Widget>[
@@ -569,8 +568,8 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
 
   Widget _appBar(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5.0),
-      margin: EdgeInsets.only(bottom: 7.0),
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      margin: const EdgeInsets.only(bottom: 7.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -579,11 +578,11 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
               child: Container(
                 height: 40.0,
                 width: 40.0,
-                padding: EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(10.0),
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                 ),
-                child: FaIcon(
+                child: const FaIcon(
                   FontAwesomeIcons.chevronLeft,
                   color: kTextTitle,
                 ),
@@ -597,11 +596,11 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
             child: Container(
               height: 40.0,
               width: 40.0,
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(10.0),
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
               ),
-              child: FaIcon(
+              child: const FaIcon(
                 FontAwesomeIcons.ellipsisV,
                 size: 17.0,
                 color: kTextTitle,
@@ -621,10 +620,10 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('Opciones'),
+            title: const Text('Opciones'),
             children: <Widget>[
               SimpleDialogOption(
-                  child: Row(
+                  child: const Row(
                     children: <Widget>[
                       Expanded(
                         child: Text('Eliminar'),
@@ -677,10 +676,10 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
       case 1:
         //Eliminar
         final bool? respuesta =
-            await this._dialogConfirm("¿Estás seguro de eliminar el registro?");
+            await _dialogConfirm("¿Estás seguro de eliminar el registro?");
 
-        if (respuesta != null && respuesta && this.estudio.id != null) {
-          estudiosBloc.deleteData(this.estudio.id ?? 0);
+        if (respuesta != null && respuesta && estudio.id != null) {
+          estudiosBloc.deleteData(estudio.id ?? 0);
           Navigator.of(context).pop();
         }
         break;
@@ -704,7 +703,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
             TextButton(
               child: Text(
                 textMainButton,
-                style: TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red),
               ),
               onPressed: () {
                 Navigator.of(context).pop(true);
@@ -727,7 +726,7 @@ class _EstudiosDetailState extends State<EstudiosDetail> {
 }
 
 class ButtonTop extends StatelessWidget {
-  const ButtonTop({
+  const ButtonTop({super.key, 
     required this.size,
     required this.text,
     required this.icon,
@@ -742,32 +741,32 @@ class ButtonTop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: this.function,
+      onTap: function,
       child: Container(
         height: 45,
         width: size.width * 0.43,
         decoration: BoxDecoration(
-            color: this.isCurrent ? Colors.black : Colors.white,
+            color: isCurrent ? Colors.black : Colors.white,
             borderRadius: BorderRadius.circular(
               30.0,
             ),
             border: Border.all(
-                color: this.isCurrent ? Colors.white : Colors.black)),
+                color: isCurrent ? Colors.white : Colors.black)),
         child: Center(
             child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Text(
-              this.text,
+              text,
               style: TextStyle(
-                color: this.isCurrent ? Colors.white : Colors.black,
+                color: isCurrent ? Colors.white : Colors.black,
                 letterSpacing: 1.3,
               ),
             ),
             FaIcon(
               icon,
               size: 15.0,
-              color: this.isCurrent ? Colors.white : Colors.black,
+              color: isCurrent ? Colors.white : Colors.black,
             )
           ],
         )),
@@ -786,22 +785,22 @@ class _FullScreenDialog extends StatefulWidget {
 
 class __FullScreenDialogState extends State<_FullScreenDialog> {
   bool obteniendoUbicacion = true;
-  Convertidor convertidor = new Convertidor();
+  Convertidor convertidor = Convertidor();
   double latitud = 0.0;
   double longitud = 0.0;
-  TextEditingController utmEste = new TextEditingController();
-  TextEditingController utmNorte = new TextEditingController();
-  TextEditingController utmZona = new TextEditingController();
-  TextEditingController incidenciaCrtl = new TextEditingController();
+  TextEditingController utmEste = TextEditingController();
+  TextEditingController utmNorte = TextEditingController();
+  TextEditingController utmZona = TextEditingController();
+  TextEditingController incidenciaCrtl = TextEditingController();
   @override
   void initState() {
     super.initState();
-    this.obtenerUbicacion();
+    obtenerUbicacion();
   }
 
   void obtenerUbicacion() async {
     setState(() {
-      this.obteniendoUbicacion = true;
+      obteniendoUbicacion = true;
     });
 
     Position position = await Geolocator.getCurrentPosition(
@@ -812,26 +811,26 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
     print("longitud: $longitud"); */
     Map utm = convertidor.fromLatLon(latitud, longitud, null);
 
-    this.utmEste.text =
+    utmEste.text =
         double.parse(utm["este"].toString()).roundToDouble().toInt().toString();
-    this.utmNorte.text = double.parse(utm["norte"].toString())
+    utmNorte.text = double.parse(utm["norte"].toString())
         .roundToDouble()
         .toInt()
         .toString();
     utmZona.text = utm["zona"].toString() + utm["letra"].toString();
 
     setState(() {
-      this.obteniendoUbicacion = false;
+      obteniendoUbicacion = false;
     });
   }
 
-  final key = new GlobalKey<ScaffoldState>();
+  final key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     var formContainer = Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
         decoration: BoxDecoration(
             border: Border.all(
                 color: kTextTitle.withOpacity(
@@ -841,7 +840,7 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
           children: <Widget>[
             TextField(
               textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'UTM Zona',
               ),
               controller: utmZona,
@@ -849,7 +848,7 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
             ),
             TextField(
               textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'UTM Este',
               ),
               controller: utmEste,
@@ -857,7 +856,7 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
             ),
             TextField(
               textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'UTM Norte',
               ),
               controller: utmNorte,
@@ -868,11 +867,11 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
               controller: incidenciaCrtl,
               textCapitalization: TextCapitalization.sentences,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Ingresa la incidencia',
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             _buttons(context),
           ],
         ),
@@ -881,10 +880,10 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
     return Scaffold(
       key: key,
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
-        title: Text(
+        title: const Text(
           "Nuevo muestreo",
           style: TextStyle(color: Colors.black),
         ),
@@ -901,7 +900,7 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Image.asset("images/location4.gif"),
-          Text("Obteniendo Ubicación",
+          const Text("Obteniendo Ubicación",
               style: TextStyle(
                 fontSize: 30.0,
               )),
@@ -922,11 +921,11 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
               Muestreo.create(m);
             }
           } else {
-            if (this.incidenciaCrtl.text == "") {
+            if (incidenciaCrtl.text == "") {
               showSnackBar(context, "Por favor ingresa en valor de incidencia");
               return;
             }
-            Muestreo m = new Muestreo(
+            Muestreo m = Muestreo(
               latitud: latitud,
               longitud: longitud,
               norte: double.parse(utmNorte.text),
@@ -940,7 +939,7 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
 
           return Navigator.pop(context, true);
         },
-        child: Text(
+        child: const Text(
           "Hacer Registro",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -949,7 +948,7 @@ class __FullScreenDialogState extends State<_FullScreenDialog> {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Text(
+        child: const Text(
           "Cancelar",
           style: TextStyle(color: Colors.grey),
         ),

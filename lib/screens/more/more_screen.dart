@@ -4,18 +4,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:store_redirect/store_redirect.dart';
 
 class MoreScreen extends StatelessWidget {
+  const MoreScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               _appbar(),
-              SizedBox(height: 10.0),
-              Text(
+              const SizedBox(height: 10.0),
+              const Text(
                 "App Ahuacatl",
                 style: TextStyle(
                   fontSize: 23.0,
@@ -23,14 +25,14 @@ class MoreScreen extends StatelessWidget {
                 ),
               ),
               _icon(),
-              SizedBox(height: 10.0),
-              Text("Versión: 1.0.0"),
-              Divider(),
+              const SizedBox(height: 10.0),
+              const Text("Versión: 1.0.0"),
+              const Divider(),
               _review(),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               _info(),
-              SizedBox(height: 10.0),
-              Divider(),
+              const SizedBox(height: 10.0),
+              const Divider(),
               _developers(),
             ],
           ),
@@ -41,8 +43,8 @@ class MoreScreen extends StatelessWidget {
 
   Widget _info() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 35.0),
-      child: Text(
+      padding: const EdgeInsets.symmetric(horizontal: 35.0),
+      child: const Text(
         "App Ahuacatl es una aplicación que sirve como herramienta en el muestreo y análisis de problemas fitosanitarios.",
         style: TextStyle(height: 2.0, fontSize: 15.0),
         textAlign: TextAlign.justify,
@@ -52,20 +54,20 @@ class MoreScreen extends StatelessWidget {
 
   Widget _developers() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
+          const Text(
             "Colaboradores",
             style: TextStyle(
               fontSize: 20.0,
               color: Colors.black54,
             ),
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           _infoDeveloper("Nancy Martínez Martínez", "annym9071@gmail.com",
               "Facultad de Ciencias Agrícolas, UAEMex"),
           _infoDeveloper("Dr. José Francisco Ramírez Davila",
@@ -83,19 +85,19 @@ class MoreScreen extends StatelessWidget {
 
   Widget _infoDeveloper(String nombre, String correo, String carrera) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5.0),
+      margin: const EdgeInsets.symmetric(vertical: 5.0),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               nombre,
-              style: TextStyle(fontSize: 19.0),
+              style: const TextStyle(fontSize: 19.0),
               textAlign: TextAlign.start,
             ),
             Text(
               carrera,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16.0,
                 color: Colors.black54,
                 letterSpacing: 1.2,
@@ -104,13 +106,13 @@ class MoreScreen extends StatelessWidget {
             ),
             Text(
               correo,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14.0,
                 color: Colors.black45,
               ),
               textAlign: TextAlign.start,
             ),
-            Divider(),
+            const Divider(),
           ]),
     );
   }
@@ -118,7 +120,7 @@ class MoreScreen extends StatelessWidget {
   Widget _icon() {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 10.0),
+        margin: const EdgeInsets.only(top: 10.0),
         height: 100.0,
         width: 100.0,
         child: Image.asset("images/icon.png"),
@@ -128,7 +130,7 @@ class MoreScreen extends StatelessWidget {
 
   Widget _review() {
     return Column(children: [
-      Row(
+      const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           FaIcon(
@@ -158,7 +160,7 @@ class MoreScreen extends StatelessWidget {
           )
         ],
       ),
-      SizedBox(height: 10.0),
+      const SizedBox(height: 10.0),
       ElevatedButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(kPrimaryColor)),
@@ -166,15 +168,15 @@ class MoreScreen extends StatelessWidget {
           StoreRedirect.redirect(
               androidAppId: "com.jovannyrch.agroapp", iOSAppId: "585027354");
         },
-        child: Text("Calificar la aplicación"),
+        child: const Text("Calificar la aplicación"),
       ),
     ]);
   }
 
   Widget _appbar() {
     return Container(
-      padding: EdgeInsets.all(10.0),
-      child: Row(
+      padding: const EdgeInsets.all(10.0),
+      child: const Row(
         children: <Widget>[
           Expanded(
             child: Text(

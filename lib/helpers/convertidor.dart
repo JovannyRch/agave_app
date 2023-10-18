@@ -57,32 +57,32 @@ class Convertidor {
   }
 
   Map toLatLon(easting, northing, zoneNum, zoneLetter, northern, strict) {
-    strict = strict != null ? strict : true;
+    strict = strict ?? true;
 
     if (!zoneLetter && northern == null) {
-      throw new Error();
+      throw Error();
     } else if (zoneLetter && northern != null) {
-      throw new Error();
+      throw Error();
     }
 
     if (strict) {
       if (easting < 100000 || 1000000 <= easting) {
-        throw new RangeError(
+        throw RangeError(
             'easting out of range (must be between 100 000 m and 999 999 m)');
       }
       if (northing < 0 || northing > 10000000) {
-        throw new RangeError(
+        throw RangeError(
             'northing out of range (must be between 0 m and 10 000 000 m)');
       }
     }
     if (zoneNum < 1 || zoneNum > 60) {
-      throw new RangeError(
+      throw RangeError(
           'zone number out of range (must be between 1 and 60)');
     }
     if (zoneLetter) {
       zoneLetter = zoneLetter.toUpperCase();
-      if (zoneLetter.length != 1 || ZONE_LETTERS.indexOf(zoneLetter) == -1) {
-        throw new RangeError(
+      if (zoneLetter.length != 1 || !ZONE_LETTERS.contains(zoneLetter)) {
+        throw RangeError(
             'zone letter out of range (must be between C and X)');
       }
       northern = zoneLetter >= 'N';
@@ -148,11 +148,11 @@ class Convertidor {
 
   Map fromLatLon(latitude, longitude, forceZoneNum) {
     if (latitude > 84.0 || latitude < -80.0) {
-      throw new RangeError(
+      throw RangeError(
           'latitude out of range (must be between 80 deg S and 84 deg N)');
     }
     if (longitude > 180.0 || longitude < -180.0) {
-      throw new RangeError(
+      throw RangeError(
           'longitude out of range (must be between 180 deg W and 180 deg E)');
     }
 

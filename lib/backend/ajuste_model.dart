@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:agave_app/backend/models/chart_data.dart';
-import 'package:flutter/gestures.dart';
 
 class Ajuste {
   double rango;
@@ -23,21 +22,21 @@ class Ajuste {
       required this.datos});
 
   double fEsferico(double h) {
-    if (h <= this.rango) {
+    if (h <= rango) {
       /* print("h <= rango : $h <= $rango"); */
-      double val = this.meseta *
-          ((1.5 * (h / this.rango)) - (0.5 * pow((h / this.rango), 3)));
+      double val = meseta *
+          ((1.5 * (h / rango)) - (0.5 * pow((h / rango), 3)));
       return val;
     }
-    return this.meseta;
+    return meseta;
   }
 
   double fExponencial(double h) {
-    return this.meseta * (1 - exp((-3 * h) / this.rango));
+    return meseta * (1 - exp((-3 * h) / rango));
   }
 
   double fGuasianno(double h) {
-    return this.meseta * (1 - exp((-pow(h, 2)) / pow(rango, 2)));
+    return meseta * (1 - exp((-pow(h, 2)) / pow(rango, 2)));
   }
 
   double fNugget(double h) {
@@ -66,7 +65,7 @@ class Ajuste {
         result.add(fNugget(d.distancia));
       }
     }
-    this.modelo = result;
+    modelo = result;
 
     return result;
   }
@@ -141,14 +140,14 @@ class Ajuste {
       suma += pow(modelo[i] - datos[i].semivariograma, 2);
     }
     double val = suma / n;
-    this.errorCuadraticoMedio = val;
+    errorCuadraticoMedio = val;
     return val >= 0 && val <= 1.0;
   }
 
   bool checkErrorCuadraticoMedioAdimensional() {
     double suma = 0.0;
     int n = datos.length;
-    double desviacionEstandar = sqrt(this.errorCuadraticoMedio);
+    double desviacionEstandar = sqrt(errorCuadraticoMedio);
     for (int i = 0; i < n; i++) {
       suma += (modelo[i] - datos[i].semivariograma) / desviacionEstandar;
     }

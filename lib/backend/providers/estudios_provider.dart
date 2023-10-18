@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class EstudiosProvider {
-  static Database? _database = null;
+  static Database? _database;
   static final EstudiosProvider db = EstudiosProvider._();
 
   String dbName = kDBname;
@@ -95,7 +95,7 @@ class EstudiosProvider {
 
     if (res.isEmpty) {
       for (String plaga in males) {
-        await this.insertPlaga(plaga);
+        await insertPlaga(plaga);
       }
       res = await db.query("plagas");
     }

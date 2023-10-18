@@ -1,5 +1,4 @@
 import 'package:agave_app/backend/providers/estudios_provider.dart';
-import 'package:flutter/foundation.dart';
 
 class Plaga {
   int id;

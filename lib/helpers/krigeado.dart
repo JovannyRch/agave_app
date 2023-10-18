@@ -4,7 +4,6 @@ import 'package:agave_app/backend/models/estudio_model.dart';
 import 'package:agave_app/backend/models/muestreo_model.dart';
 
 import '../backend/models/modelos_model.dart';
-import '../backend/models/muestreo_model.dart';
 import 'calculos.dart';
 
 enum Modelo { Esferico, Exponencial, Gaussiano, Nugget }
@@ -16,8 +15,9 @@ Modelo getModelo(String modelo) {
     return Modelo.Exponencial;
   } else if (modelo == Ajuste.GUASSIANO) {
     return Modelo.Gaussiano;
-  } else
+  } else {
     return Modelo.Nugget;
+  }
 }
 
 class Krigeado {
@@ -37,7 +37,7 @@ class Krigeado {
 
   double krigeadoEnPunto(double x, double y) {
     List<MuestreoDistancia> distancias = estudio.muestreos
-        .map((muestreo) => new MuestreoDistancia(
+        .map((muestreo) => MuestreoDistancia(
             muestreo: muestreo,
             distancia: Calculos.calcularDistancia(
                 x, y, muestreo.norte, muestreo.este)))
@@ -51,9 +51,9 @@ class Krigeado {
     GammaH gamma = GammaH(
         modelo: modelo,
         tabla: tabla,
-        rango: this.rango,
-        efectoPepita: this.efectoPepita,
-        meseta: this.meseta);
+        rango: rango,
+        efectoPepita: efectoPepita,
+        meseta: meseta);
     Matrix c = Matrix(gamma.getMatriC());
     print("Matriz c");
     print(c);
@@ -131,7 +131,7 @@ class GammaH {
       required this.efectoPepita,
       required this.meseta,
       required this.rango}) {
-    int size = this.tabla.distancias.length;
+    int size = tabla.distancias.length;
 
     for (int i = 0; i < size; i++) {
       valores.add([]);
@@ -153,7 +153,7 @@ class GammaH {
 
   List<List<double>> getMatriC() {
     List<List<double>> matriz = [];
-    int size = this.tabla.distancias.length;
+    int size = tabla.distancias.length;
 
     for (int i = 0; i < size + 1; i++) {
       List<double> lista = [];
@@ -177,7 +177,7 @@ class GammaH {
 
   List<double> getC0() {
     List<double> res = [];
-    int size = this.tabla.distancias.length;
+    int size = tabla.distancias.length;
 
     for (int j = 0; j < size; j++) {
       res.add(valores[j][size]);

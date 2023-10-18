@@ -15,7 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class SemivariogramScreen extends StatefulWidget {
   Estudio estudio;
 
-  SemivariogramScreen(@required this.estudio);
+  SemivariogramScreen(@required this.estudio, {super.key});
 
   @override
   _SemivariogramScreenState createState() => _SemivariogramScreenState();
@@ -37,9 +37,9 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
   List<Renglon> tabla = [];
   int currentPage = 0;
   late Size size;
-  TextEditingController pepita = new TextEditingController();
-  TextEditingController rango = new TextEditingController();
-  TextEditingController meseta = new TextEditingController();
+  TextEditingController pepita = TextEditingController();
+  TextEditingController rango = TextEditingController();
+  TextEditingController meseta = TextEditingController();
   String modeloDropdownValue = Ajuste.ESFERICO;
   List<ChartData> data = [];
   List<DataRow> rows = [];
@@ -50,29 +50,29 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
 
   bool isAjustado = false;
 
-  final key = new GlobalKey<ScaffoldState>();
+  final key = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
-    isAjustado = this.widget.estudio.modelo != null;
+    isAjustado = widget.estudio.modelo != null;
 
-    data = this.calcularSemivariograma(widget.estudio);
+    data = calcularSemivariograma(widget.estudio);
     if (isAjustado) {
-      pepita.text = this.widget.estudio.pepita.toString();
-      rango.text = this.widget.estudio.rango.toString();
-      meseta.text = this.widget.estudio.meseta.toString();
-      modeloDropdownValue = this.widget.estudio.modelo.isEmpty
+      pepita.text = widget.estudio.pepita.toString();
+      rango.text = widget.estudio.rango.toString();
+      meseta.text = widget.estudio.meseta.toString();
+      modeloDropdownValue = widget.estudio.modelo.isEmpty
           ? Ajuste.ESFERICO
-          : this.widget.estudio.modelo;
+          : widget.estudio.modelo;
 
-      Ajuste ajuste = new Ajuste(
-        meseta: this.widget.estudio.meseta,
-        pepita: this.widget.estudio.pepita,
-        rango: this.widget.estudio.rango,
+      Ajuste ajuste = Ajuste(
+        meseta: widget.estudio.meseta,
+        pepita: widget.estudio.pepita,
+        rango: widget.estudio.rango,
         datos: data,
       );
       setState(() {
-        this.valoresModelo = ajuste.getValues(modeloDropdownValue);
+        valoresModelo = ajuste.getValues(modeloDropdownValue);
         print("model values length ${valoresModelo.length}");
       });
     } else {
@@ -89,7 +89,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
     return Scaffold(
       key: key,
       appBar: AppBar(
-        title: Text("Semivariograma"),
+        title: const Text("Semivariograma"),
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
@@ -98,7 +98,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
           });
         },
         currentIndex: currentPage,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.chartLine),
             label: "Gráfica",
@@ -111,7 +111,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           child: IndexedStack(
             index: currentPage,
             children: <Widget>[
@@ -134,18 +134,17 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
     distanciasSemivariograma.clear();
     incidenciaSemivariograma.clear();
 
-    tabla.forEach((r) {
+    for (var r in tabla) {
       DataCell c0 = DataCell(Text(r.n.toString()));
       DataCell c1 = DataCell(Text(r.distancia.toString()));
-      /*  DataCell c2 = DataCell(Text(r.suma.toString())); */
       DataCell c3 = DataCell(Text(r.yh.toString()));
       rows.add(DataRow(cells: [c0, c1, c3]));
       distanciasSemivariograma.add(r.distancia);
       incidenciaSemivariograma.add(r.yh);
-    });
+    }
     return SingleChildScrollView(
       child: DataTable(
-        columns: <DataColumn>[
+        columns: const <DataColumn>[
           DataColumn(label: Text('n')),
           DataColumn(label: Text('Distancias')),
           /*   DataColumn(label: Text('Suma')), */
@@ -177,14 +176,14 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
       ],
     );
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             stack,
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             _rowInput(),
@@ -197,7 +196,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
   Widget _rowInput() {
     var dropDown = DropdownButton<String>(
       value: modeloDropdownValue,
-      icon: Icon(Icons.arrow_downward),
+      icon: const Icon(Icons.arrow_downward),
       iconSize: 24,
       elevation: 16,
       underline: Container(
@@ -235,7 +234,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
       ),
       child: Text(
         isAjustado ? "Volver a ajustar" : "Ajustar",
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
         ),
       ),
@@ -243,7 +242,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
     );
 
     ElevatedButton siguienteButton = ElevatedButton(
-      onPressed: this.valoresModelo.isEmpty ? null : handleSiguienteClick,
+      onPressed: valoresModelo.isEmpty ? null : handleSiguienteClick,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
@@ -251,7 +250,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
           },
         ),
       ),
-      child: Text(
+      child: const Text(
         "Siguiente",
         style: TextStyle(
           color: Colors.white,
@@ -263,32 +262,32 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
     var row = Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Container(
+        SizedBox(
           width: 100.0,
           child: TextField(
             keyboardType: TextInputType.number,
             controller: pepita,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: "Pepita",
             ),
           ),
         ),
-        Container(
+        SizedBox(
           width: 100.0,
           child: TextField(
             keyboardType: TextInputType.number,
             controller: meseta,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: "Meseta",
             ),
           ),
         ),
-        Container(
+        SizedBox(
           width: 100.0,
           child: TextField(
             controller: rango,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: "Rango",
             ),
           ),
@@ -303,7 +302,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ajustarButton,
-            SizedBox(width: 10.0),
+            const SizedBox(width: 10.0),
             siguienteButton,
           ],
         )
@@ -320,7 +319,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
       MaterialPageRoute(
         builder: (context) => AjusteScreen(
           modelo: modeloDropdownValue,
-          ajuste: new Ajuste(
+          ajuste: Ajuste(
             meseta: mesetaValue,
             pepita: pepitaValue,
             rango: rangoValue,
@@ -343,26 +342,26 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
     List<Muestreo> muestreos = [...widget.estudio.muestreos];
     String modelo = modeloDropdownValue;
 
-    this.widget.estudio.pepita = pepitaValue;
-    this.widget.estudio.rango = rangoValue;
-    this.widget.estudio.meseta = mesetaValue;
-    this.widget.estudio.modelo = modelo;
+    widget.estudio.pepita = pepitaValue;
+    widget.estudio.rango = rangoValue;
+    widget.estudio.meseta = mesetaValue;
+    widget.estudio.modelo = modelo;
 
-    await this.widget.estudio.update();
+    await widget.estudio.update();
 
-    Ajuste ajuste = new Ajuste(
+    Ajuste ajuste = Ajuste(
       meseta: mesetaValue,
       pepita: pepitaValue,
       rango: rangoValue,
       datos: data,
     );
 
-    if (!this.isAjustado) {
-      this.isAjustado = true;
+    if (!isAjustado) {
+      isAjustado = true;
     }
 
     setState(() {
-      this.valoresModelo = ajuste.getValues(modelo);
+      valoresModelo = ajuste.getValues(modelo);
     });
 
     showSnackBar(context, "Ajuste completado");
@@ -378,13 +377,13 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
         ),
         barWidth: 0.0,
         isStrokeCapRound: false,
-        dotData: FlDotData(
+        dotData: const FlDotData(
           show: true,
         ),
       )
     ];
 
-    if (this.isAjustado) {
+    if (isAjustado) {
       charts.add(LineChartBarData(
         spots: getModelGraphData(),
         isCurved: false,
@@ -393,7 +392,7 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
         ),
         barWidth: 0.0,
         isStrokeCapRound: false,
-        dotData: FlDotData(
+        dotData: const FlDotData(
           show: true,
         ),
       ));
@@ -404,14 +403,14 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
         show: true,
         drawVerticalLine: true,
         getDrawingHorizontalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
+          return const FlLine(
+            color: Color(0xff37434d),
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
+          return const FlLine(
+            color: Color(0xff37434d),
             strokeWidth: 1,
           );
         },
@@ -443,11 +442,11 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
     int n = data.length;
     for (int i = 0; i < n; i++) {
       double y = 0.0;
-      if (i < this.valoresModelo.length) {
-        y = this.valoresModelo[i];
+      if (i < valoresModelo.length) {
+        y = valoresModelo[i];
       }
-      double x = this.data[i].distancia;
-      result.add(new FlSpot(x, y));
+      double x = data[i].distancia;
+      result.add(FlSpot(x, y));
     }
 
     return result;
@@ -463,16 +462,16 @@ class _SemivariogramScreenState extends State<SemivariogramScreen> {
     double amplitud = distancias.last / 2;
     distancias = filtrarDistancias(distancias, amplitud);
 
-    this.tabla.clear();
+    tabla.clear();
     List<ChartData> semivariograma2 = [];
     for (int i = 0; i < distancias.length; i++) {
       double incidencia = semivariogramaIncidencias[i];
       double distancia = distancias[i];
       distancia = double.parse(distancia.toStringAsFixed(2));
       incidencia = double.parse(incidencia.toStringAsFixed(2));
-      final cD = new ChartData(distancia, incidencia);
+      final cD = ChartData(distancia, incidencia);
       semivariograma2.add(cD);
-      this.tabla.add(new Renglon(i, distancia, incidencia));
+      tabla.add(Renglon(i, distancia, incidencia));
     }
 
     return semivariograma2;
